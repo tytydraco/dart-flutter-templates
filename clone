@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -e
+
+CWD="$(dirname -- "$( readlink -f -- "$0")")"
+cd "$CWD"
+
+CONFIG="$CWD/.config"
+BASE="$1"
+NEW="$2"
+
+if [[ ! -f "$CONFIG" ]]; then
+    echo "No .config file found"
+    exit 1
+fi
+
+if [[ ! -d "$BASE" ]]; then
+    echo "Base package not found"
+    exit 1
+fi
+
+if [[ -d "$NEW" ]]; then
+    echo "Destination directory already exists"
+    exit 1
+fi
+
+source "$CONFIG"
+
+cp -ra "$BASE" "$NEW"
+
+find "$NEW" -type f -exec sed -i'' -e "s|@pkgname@|$pkgname|g" {} +
+find "$NEW" -type f -exec sed -i'' -e "s|@pkgdesc@|$pkgdesc|g" {} +
+find "$NEW" -type f -exec sed -i'' -e "s|@ghusername@|$ghusername|g" {} +
+find "$NEW" -type f -exec sed -i'' -e "s|@homepageurl@|$homepageurl|g" {} +
