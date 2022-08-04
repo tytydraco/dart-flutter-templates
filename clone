@@ -3,10 +3,9 @@
 set -e
 
 CWD="$(dirname -- "$( readlink -f -- "$0")")"
-cd "$CWD"
 
 CONFIG="$CWD/.config"
-BASE="$1"
+BASE="$CWD/$1"
 NEW="$2"
 
 if [[ ! -f "$CONFIG" ]]; then
